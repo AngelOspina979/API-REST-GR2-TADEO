@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"todo-api/internal/auth"
 	"todo-api/internal/handlers"
 	"todo-api/internal/middleware"
@@ -17,6 +18,12 @@ func main() {
 		port = "8080"
 	}
 
+	// ✅ CREAR CARPETA DB PRIMERO
+	if err := os.MkdirAll("db", os.ModePerm); err != nil {
+		log.Fatalf("Error creando carpeta db: %v", err)
+	}
+
+	// ✅ INICIALIZAR BASE DE DATOS UNA SOLA VEZ
 	repo, err := repository.NewSQLiteRepository("db/todo.db")
 	if err != nil {
 		log.Fatalf("Error al inicializar la base de datos: %v", err)
